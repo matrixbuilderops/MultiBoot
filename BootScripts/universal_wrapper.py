@@ -1,0 +1,325 @@
+#!/usr/bin/env python3
+"""
+🔥 UNIVERSAL WRAPPER - EVERYTHING Gets Wrapped
+All OSes go through detection, driver check, and injection
+"""
+
+import json
+import subprocess
+from pathlib import Path
+
+class UniversalWrapper:
+    def __init__(self):
+        self.base_dir = Path(__file__).parent.parent
+        self.hardware = self.load_hardware()
+        self.computer_type = None
+        self.boot_mode = None
+    
+    def load_hardware(self):
+        """Load detected hardware profile"""
+        profile_file = self.base_dir / "HardwareProfiles" / "current.json"
+        if profile_file.exists():
+            with open(profile_file, 'r') as f:
+                return json.load(f)
+        return {}
+    
+    def is_mac(self):
+        """Detect if running on a Mac"""
+        try:
+            dmi = subprocess.run(['dmidecode', '-s', 'system-manufacturer'], 
+                               capture_output=True, text=True, timeout=2)
+            if 'Apple' in dmi.stdout:
+                return True
+        except:
+            pass
+        
+        cpu_name = self.hardware.get('cpu', {}).get('name', '').lower()
+        if 'apple' in cpu_name:
+            return True
+        
+        return False
+    
+    def is_apple_silicon(self):
+        """Detect if running on Apple Silicon (M1/M2/M3)"""
+        arch = self.hardware.get('architecture', '')
+        if arch in ['aarch64', 'arm64']:
+            return True
+        return False
+    
+    def detect_computer_type(self):
+        """Detect what type of computer we're booting on"""
+        if self.is_mac():
+            if self.is_apple_silicon():
+                return "ARM_MAC"
+            else:
+                return "INTEL_MAC"
+        else:
+            platform = self.hardware.get('platform', 'unknown')
+            if platform == 'AMD':
+                return "AMD_PC"
+            else:
+                return "INTEL_PC"
+    
+    def get_boot_strategy(self, computer_type, target_os):
+        """
+        ALL OSes are wrapped - this determines HOW to wrap them
+        """
+        
+        strategies = {
+            # Intel/AMD PC - ALL wrapped
+            "INTEL_PC": {
+                "macos": {
+                    "method": "opencore_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: OpenCore with hardware detection",
+                    "steps": [
+                        "Detect hardware",
+                        "Check kext archive",
+                        "Download missing kexts",
+                        "Generate OpenCore config",
+                        "Inject kexts",
+                        "Boot via OpenCore"
+                    ]
+                },
+                "windows": {
+                    "method": "driver_injection_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: Driver injection before boot",
+                    "steps": [
+                        "Detect hardware",
+                        "Check driver archive",
+                        "Download missing drivers",
+                        "Inject drivers to Windows",
+                        "Update registry",
+                        "Chainload Windows bootloader"
+                    ]
+                },
+                "linux": {
+                    "method": "module_injection_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: Module injection at boot",
+                    "steps": [
+                        "Detect hardware",
+                        "Check module archive",
+                        "Download missing modules",
+                        "Inject modules to initramfs",
+                        "Set kernel parameters",
+                        "Boot Linux kernel"
+                    ]
+                }
+            },
+            
+            "AMD_PC": {
+                "macos": {
+                    "method": "opencore_amd_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: OpenCore with AMD patches",
+                    "steps": [
+                        "Detect AMD hardware",
+                        "Check kext archive",
+                        "Download AMD-specific kexts",
+                        "Apply AMD kernel patches",
+                        "Generate OpenCore config",
+                        "Boot via OpenCore"
+                    ]
+                },
+                "windows": {
+                    "method": "driver_injection_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: AMD driver injection",
+                    "steps": [
+                        "Detect AMD hardware",
+                        "Check AMD driver archive",
+                        "Inject AMD drivers",
+                        "Boot Windows"
+                    ]
+                },
+                "linux": {
+                    "method": "module_injection_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: AMD module injection",
+                    "steps": [
+                        "Detect AMD hardware",
+                        "Inject AMD modules",
+                        "Boot Linux"
+                    ]
+                }
+            },
+            
+            # Intel Mac - ALL wrapped (even though native)
+            "INTEL_MAC": {
+                "macos": {
+                    "method": "native_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: Verify drivers before native boot",
+                    "steps": [
+                        "Detect Mac hardware",
+                        "Verify system integrity",
+                        "Check for updates",
+                        "Boot macOS natively"
+                    ]
+                },
+                "windows": {
+                    "method": "bootcamp_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: Boot Camp with driver injection",
+                    "steps": [
+                        "Detect Mac hardware",
+                        "Check Boot Camp driver archive",
+                        "Inject Boot Camp drivers",
+                        "Configure Boot Camp",
+                        "Boot Windows"
+                    ]
+                },
+                "linux": {
+                    "method": "module_injection_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: Mac-specific module injection",
+                    "steps": [
+                        "Detect Mac hardware",
+                        "Check Mac-compatible modules",
+                        "Inject Apple hardware modules",
+                        "Boot Linux"
+                    ]
+                }
+            },
+            
+            # Apple Silicon Mac - ALL wrapped
+            "ARM_MAC": {
+                "macos": {
+                    "method": "native_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: Verify before native boot",
+                    "steps": [
+                        "Detect Apple Silicon",
+                        "Verify system",
+                        "Boot macOS natively"
+                    ]
+                },
+                "windows": {
+                    "method": "arm_windows_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: Windows ARM with driver injection",
+                    "experimental": True,
+                    "steps": [
+                        "Detect Apple Silicon",
+                        "Check Windows ARM drivers",
+                        "Inject ARM-compatible drivers",
+                        "Boot Windows ARM"
+                    ]
+                },
+                "linux": {
+                    "method": "asahi_wrapper",
+                    "wrapper_needed": True,
+                    "description": "Wrapped: Asahi Linux with full driver stack",
+                    "steps": [
+                        "Detect Apple Silicon",
+                        "Check Asahi driver archive",
+                        "Inject Apple GPU drivers",
+                        "Inject audio drivers",
+                        "Configure devicetree",
+                        "Boot Asahi Linux"
+                    ]
+                }
+            }
+        }
+        
+        return strategies.get(computer_type, {}).get(target_os, {})
+    
+    def check_driver_archive(self, target_os):
+        """Check what's in the driver archive for target OS"""
+        archive_dir = self.base_dir / "DriverArchive"
+        
+        if target_os == "macos":
+            kext_dir = archive_dir / "macOS" / "Kexts"
+            if kext_dir.exists():
+                kexts = list(kext_dir.glob("*.kext"))
+                return {"found": len(kexts), "kexts": [k.name for k in kexts]}
+        
+        elif target_os == "windows":
+            driver_dir = archive_dir / "Windows"
+            if driver_dir.exists():
+                drivers = list(driver_dir.rglob("*.exe")) + list(driver_dir.rglob("*.inf"))
+                return {"found": len(drivers), "drivers": [d.name for d in drivers]}
+        
+        elif target_os == "linux":
+            module_dir = archive_dir / "Linux" / "modules"
+            if module_dir.exists():
+                modules = list(module_dir.rglob("*.ko"))
+                return {"found": len(modules), "modules": [m.name for m in modules]}
+        
+        return {"found": 0}
+    
+    def configure_boot(self, target_os):
+        """Configure wrapped boot for selected OS"""
+        computer_type = self.detect_computer_type()
+        strategy = self.get_boot_strategy(computer_type, target_os)
+        archive_status = self.check_driver_archive(target_os)
+        
+        print(f"\n{'='*60}")
+        print(f"🔥 UNIVERSAL WRAPPER - Configuring {target_os.upper()}")
+        print(f"{'='*60}")
+        print(f"\n🖥️  Computer Type: {computer_type}")
+        print(f"🎯 Target OS: {target_os}")
+        print(f"🔧 Wrapper Method: {strategy.get('method', 'unknown')}")
+        print(f"📝 {strategy.get('description', 'N/A')}")
+        
+        print(f"\n📦 Driver Archive Status:")
+        print(f"   Found: {archive_status.get('found', 0)} items")
+        
+        if strategy.get('experimental'):
+            print(f"\n⚠️  Warning: Experimental support!")
+        
+        print(f"\n📋 Wrapping Steps:")
+        for i, step in enumerate(strategy.get('steps', []), 1):
+            print(f"   {i}. {step}")
+        
+        return {
+            'computer_type': computer_type,
+            'target_os': target_os,
+            'strategy': strategy,
+            'archive_status': archive_status
+        }
+    
+    def show_boot_menu(self):
+        """Show boot menu with wrapping info for all OSes"""
+        computer_type = self.detect_computer_type()
+        
+        print("\n" + "="*60)
+        print("🔥 UNIVERSAL MULTIBOOT - GENESIS (ALL WRAPPED)")
+        print("="*60)
+        print(f"\n💻 Computer: {computer_type}")
+        print(f"🖥️  CPU: {self.hardware.get('cpu', {}).get('name', 'Unknown')}")
+        print(f"⚡ Firmware: {self.hardware.get('firmware', 'Unknown')}")
+        
+        print(f"\n🎯 ALL Operating Systems Are WRAPPED:")
+        print(f"   (Hardware detection → Driver check → Injection → Boot)")
+        
+        for i, os_name in enumerate(['macOS', 'Windows', 'Linux'], 1):
+            os_lower = os_name.lower()
+            strategy = self.get_boot_strategy(computer_type, os_lower)
+            archive = self.check_driver_archive(os_lower)
+            
+            print(f"\n{i}. {os_name}")
+            print(f"   Wrapper: {strategy.get('method', 'N/A')}")
+            print(f"   Method: {strategy.get('description', 'N/A')}")
+            print(f"   Archive: {archive.get('found', 0)} drivers ready")
+        
+        print("\n" + "="*60)
+        print("💡 Every OS gets: detection → archive check → injection")
+        print("="*60)
+
+def main():
+    """Test the universal wrapper"""
+    wrapper = UniversalWrapper()
+    
+    # Show the boot menu
+    wrapper.show_boot_menu()
+    
+    # Test each OS configuration
+    for os_name in ['macos', 'windows', 'linux']:
+        config = wrapper.configure_boot(os_name)
+        input(f"\nPress Enter to continue to next OS...")
+
+if __name__ == "__main__":
+    main()

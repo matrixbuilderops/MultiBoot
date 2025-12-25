@@ -1,0 +1,33 @@
+{
+  "fingerprint": "intel_intelrcoretmi57300uc_80865916",
+  "platform": "Intel",
+  "firmware": "BIOS",
+  "macos": {
+    "kexts": [
+      "AirportItlwm.kext",
+      "AppleALC.kext",
+      "IntelBluetoothFirmware.kext",
+      "IntelMausi.kext",
+      "Lilu.kext",
+      "USBInjectAll.kext",
+      "VirtualSMC.kext",
+      "WhateverGreen.kext"
+    ]
+  },
+  "windows": {
+    "drivers": [
+      "Intel_Chipset_Win10.exe",
+      "Intel_Ethernet_Win10.exe",
+      "Intel_Graphics_Win10.exe",
+      "Intel_WiFi_Win10.exe"
+    ]
+  },
+  "linux": {
+    "modules": [
+      "e1000e",
+      "i915",
+      "iwlmvm",
+      "iwlwifi"
+    ]
+  }
+}

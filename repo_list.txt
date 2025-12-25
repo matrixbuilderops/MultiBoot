@@ -1,0 +1,68 @@
+linux
+Other
+docs
+Other
+vdmtool
+MIT License
+artwork
+AsahiLinux.github.io
+Other
+gpu
+m1n1
+MIT License
+macvdmtool
+Apache License 2.0
+pidcodes.github.com
+Other
+asahi-installer
+MIT License
+dcp-parser
+u-boot
+Other
+asahi-plymouth
+GNU General Public License v3.0
+asahilinux-keyring
+asahi-scripts
+MIT License
+mkinitcpio
+GNU General Public License v2.0
+devicetrees
+Other
+asahi-calamares-configs
+MIT License
+asahi-audio
+MIT License
+xkeyboard-config
+Other
+calamares
+tilecalc
+alsa-ucm-conf-asahi
+BSD 3-Clause \
+asahi-nvram
+MIT License
+speakersafetyd
+MIT License
+tiny-dfr
+MIT License
+asahistats
+MIT License
+widevine-installer
+MIT License
+muvm
+hidpipe
+MIT License
+binfmt-dispatcher
+MIT License
+.github
+asahi-fedora-remix-logos
+Creative Commons Attribution Share Alike 4.0 International
+asahi-fedora-remix.org
+asahi-fedora-remix-release
+MIT License
+mesa-nightly
+asahi-installer-data
+MIT License
+fex-emu-rootfs-generator
+MIT License
+tuxvdmtool
+Apache License 2.0

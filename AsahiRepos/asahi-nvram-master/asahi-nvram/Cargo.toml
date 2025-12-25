@@ -1,0 +1,20 @@
+[package]
+name = "asahi-nvram"
+version = "0.2.3"
+edition = "2021"
+license = "MIT"
+description = "A tool to read and write nvram variables on ARM Macs"
+homepage = "https://github.com/WhatAmISupposedToPutHere/asahi-nvram"
+repository = "https://github.com/WhatAmISupposedToPutHere/asahi-nvram"
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies.apple-nvram]
+path = "../apple-nvram"
+version = "0.3"
+
+[dependencies.clap]
+version = "3"
+features = ["cargo"]
+

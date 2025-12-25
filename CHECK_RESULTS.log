@@ -1,0 +1,100 @@
+[sudo] password for phantom-eternal: 🔍 RUNNING COMPREHENSIVE PRE-BOOT CHECKS
+==========================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHECK 1: LINUX PARTITION (/dev/sde4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Partition info:
+/dev/sde4: LABEL="Ubuntu" UUID="eeaefeef-725c-4fe9-8e52-db97aa9d5f9d" BLOCK_SIZE="4096" TYPE="ext4" PARTLABEL="Ubuntu" PARTUUID="163405b3-7e50-4fea-a88b-a70356c8ebe1"
+
+Attempting to mount...
+✅ Linux partition mounted successfully!
+
+Checking for kernel files...
+❌ /boot/vmlinuz symlink NOT found
+   Available kernels:
+❌ /boot/initrd.img symlink NOT found
+   Available initrds:
+
+All boot files:
+-r--r--r-- 1 root root  71M Dec 20 21:08 initrd
+-r--r--r-- 1 root root  15M Dec 20 21:08 vmlinuz
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHECK 2: WINDOWS PARTITION (/dev/sde2)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Partition info:
+/dev/sde2: LABEL="Windows10" BLOCK_SIZE="512" UUID="2CF676F66E6B4DC4" TYPE="ntfs" PARTLABEL="primary" PARTUUID="221efbc4-7a6e-4341-b378-3b779d509f90"
+
+Attempting to mount...
+✅ Windows partition mounted!
+
+Checking bootloader locations...
+✅ Found: /Windows/Boot/EFI/bootmgfw.efi
+-rwxrwxrwx 2 root root 2.7M Sep  5  2024 /mnt/win_check/Windows/Boot/EFI/bootmgfw.efi
+❌ NOT at /EFI/Microsoft/Boot/bootmgfw.efi
+
+Checking BCD (Boot Configuration Data)...
+⚠️  BCD not found in common locations
+
+Windows directory structure:
+total 49
+drwxrwxrwx  1 root root  4096 Apr  1  2024 .
+drwxr-xr-x 16 root root    16 Dec 22 17:13 ..
+drwxrwxrwx  1 root root     0 Apr  1  2024 $Recycle.Bin
+drwxrwxrwx  1 root root     0 Apr  1  2024 PerfLogs
+drwxrwxrwx  1 root root  4096 Apr  1  2024 ProgramData
+drwxrwxrwx  1 root root  4096 Apr  1  2024 Program Files
+drwxrwxrwx  1 root root  4096 Apr  1  2024 Program Files (x86)
+drwxrwxrwx  1 root root     0 Apr  1  2024 Recovery
+drwxrwxrwx  1 root root  4096 Apr  1  2024 Users
+drwxrwxrwx  1 root root 20480 Sep  5  2024 Windows
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHECK 3: MACOS PARTITION (/dev/sde3)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Partition info:
+/dev/sde3: UUID="cf15d05a-fbfe-4ac6-9eb1-7deef1b2d5f6" BLOCK_SIZE="4096" TYPE="apfs" PARTLABEL="primary" PARTUUID="e23957c5-72ce-4d0d-b57e-9f141fd55d75"
+
+Checking if APFS can be mounted on Linux...
+⚠️  apfs-fuse not installed (expected)
+   Can't check macOS filesystem from Linux
+
+APFS on external drive analysis:
+  • macOS APFS on external = needs special boot config
+  • OpenCore needs to be configured for external boot
+  • SecureBootModel must be disabled
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHECK 4: EFI PARTITION (/dev/sde1)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ EFI partition mounted
+
+Checking OpenCore configuration...
+✅ config.plist exists
+
+Checking for external boot configurations...
+  SecureBootModel:       "Vault": "Optional"
+  ⚠️  BlessOverride not found (needed for external boot)
+
+GRUB configuration:
+✅ grub.cfg exists
+   Size: 4076 bytes
+
+Menu entries found:
+menuentry "macOS (Universal - Auto-Detect)" --class macos {
+menuentry "Windows 10 (Universal - Auto-Detect)" --class windows {
+menuentry "Ubuntu Linux (Universal - Auto-Detect)" --class ubuntu {
+    menuentry "Hardware Detection Test" {
+    menuentry "Show All Partitions" {
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Results saved. Review above for issues.
+

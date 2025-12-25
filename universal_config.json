@@ -1,0 +1,183 @@
+{
+  "version": "1.0",
+  "project": "Universal MultiBoot - Genesis",
+  "auto_detect": true,
+  
+  "architectures": {
+    "x86_64": {
+      "bootloader": "grub_opencore",
+      "efi_path": "/EFI/BOOT/BOOTX64.EFI",
+      "detection_method": "cpuid"
+    },
+    "ARM64": {
+      "bootloader": "m1n1_uboot_grub",
+      "efi_path": "/EFI/BOOT/BOOTAA64.EFI",
+      "detection_method": "devicetree"
+    }
+  },
+  
+  "boot_entries": {
+    "macos": {
+      "name": "macOS",
+      "enabled": true,
+      "icon": "apple",
+      
+      "x86_64": {
+        "method": "opencore",
+        "partition_label": "macOS",
+        "bootloader_path": "/EFI/OC/OpenCore.efi",
+        "driver_injection": true,
+        "kexts_required": true,
+        "smbios_required": true
+      },
+      
+      "ARM64": {
+        "method": "native",
+        "partition_label": "macOS-ARM",
+        "bootloader_path": "/System/Library/CoreServices/boot.efi",
+        "driver_injection": false,
+        "kexts_required": false
+      }
+    },
+    
+    "windows": {
+      "name": "Windows",
+      "enabled": true,
+      "icon": "windows",
+      
+      "x86_64": {
+        "method": "chainload",
+        "partition_label": "Windows10",
+        "bootloader_path": "/EFI/Microsoft/Boot/bootmgfw.efi",
+        "driver_injection": true,
+        "pre_boot_script": "inject_windows_drivers_x86.sh"
+      },
+      
+      "ARM64": {
+        "method": "uefi_arm64",
+        "partition_label": "Windows11-ARM",
+        "bootloader_path": "/EFI/Microsoft/Boot/bootmgfw.efi",
+        "driver_injection": true,
+        "pre_boot_script": "inject_windows_drivers_arm.sh"
+      }
+    },
+    
+    "linux": {
+      "name": "Linux",
+      "enabled": true,
+      "icon": "linux",
+      
+      "x86_64": {
+        "method": "direct_kernel",
+        "partition_label": "Ubuntu",
+        "partition_uuid": "eeaefeef-725c-4fe9-8e52-db97aa9d5f9d",
+        "kernel_path": "/boot/vmlinuz",
+        "initrd_path": "/boot/initrd.img",
+        "boot_args": "ro quiet splash",
+        "driver_injection": true,
+        "modules_required": ["nvidia", "r8169", "iwlwifi"]
+      },
+      
+      "ARM64": {
+        "method": "asahi_kernel",
+        "partition_label": "Linux-ARM",
+        "kernel_path": "/boot/vmlinuz-asahi",
+        "initrd_path": "/boot/initrd.img-asahi",
+        "boot_args": "ro quiet splash apple_silicon=1",
+        "driver_injection": true,
+        "modules_required": ["apple-gpu", "drm_asahi", "brcmfmac", "apple-bce", "snd-soc-macaudio"]
+      }
+    }
+  },
+  
+  "driver_injection": {
+    "enabled": true,
+    "source": "/EFI/UniversalWrapper/DriverArchive",
+    "method": "auto",
+    
+    "macos": {
+      "x86_64": {
+        "kexts_path": "macOS/x86_Kexts",
+        "injection_point": "opencore_config",
+        "acpi_patches": true
+      },
+      "ARM64": {
+        "note": "Native boot, no injection needed"
+      }
+    },
+    
+    "windows": {
+      "x86_64": {
+        "drivers_path": "Windows/x86_Drivers",
+        "injection_method": "driver_store",
+        "registry_keys": true
+      },
+      "ARM64": {
+        "drivers_path": "Windows/arm64_Drivers",
+        "injection_method": "driver_store",
+        "registry_keys": true
+      }
+    },
+    
+    "linux": {
+      "x86_64": {
+        "modules_path": "Linux/x86_Modules",
+        "injection_method": "initramfs",
+        "firmware_path": "Linux/x86_Firmware"
+      },
+      "ARM64": {
+        "modules_path": "Linux/arm64_Modules",
+        "injection_method": "initramfs",
+        "firmware_path": "Linux/arm64_Firmware",
+        "devicetree_path": "Linux/arm64_DeviceTree"
+      }
+    }
+  },
+  
+  "hardware_detection": {
+    "enabled": true,
+    "cache_profiles": true,
+    "cache_path": "/EFI/UniversalWrapper/HardwareProfiles",
+    "detection_timeout": 5,
+    
+    "detect": {
+      "cpu": true,
+      "gpu": true,
+      "network": true,
+      "storage": true,
+      "audio": true,
+      "usb": true,
+      "firmware": true
+    }
+  },
+  
+  "boot_menu": {
+    "timeout": 10,
+    "default_os": "macos",
+    "show_hardware_info": true,
+    "theme": "genesis",
+    
+    "colors": {
+      "background": "#1a1a1a",
+      "text": "#ffffff",
+      "highlight": "#00ff00",
+      "border": "#333333"
+    }
+  },
+  
+  "advanced": {
+    "verbose_mode": false,
+    "safe_mode": false,
+    "recovery_mode": false,
+    "log_level": "info",
+    "log_path": "/EFI/UniversalWrapper/Logs"
+  },
+  
+  "updates": {
+    "auto_check": true,
+    "auto_download": false,
+    "update_server": "https://github.com/universal-multiboot/genesis",
+    "kexts_source": "dortania",
+    "drivers_source": "microsoft"
+  }
+}

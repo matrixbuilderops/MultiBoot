@@ -1,0 +1,39 @@
+{
+  "architecture": "x86_64",
+  "platform": "Intel",
+  "firmware": "BIOS",
+  "cpu": {
+    "name": "Intel(R) Core(TM) i5-7300U CPU @ 2.60GHz",
+    "cores": 4,
+    "vendor": "Intel"
+  },
+  "gpu": [
+    {
+      "vendor_id": "8086",
+      "device_id": "5916",
+      "manufacturer": "Intel",
+      "description": "02.0 VGA compatible controller: Intel Corporation HD Graphics 620 (rev 02)"
+    }
+  ],
+  "network": [
+    {
+      "vendor_id": "8086",
+      "device_id": "15d7",
+      "type": "Ethernet",
+      "description": "1f.6 Ethernet controller: Intel Corporation Ethernet Connection (4) I219-LM (rev 21)"
+    },
+    {
+      "vendor_id": "8086",
+      "device_id": "24fd",
+      "type": "WiFi",
+      "description": "00.0 Network controller: Intel Corporation Wireless 8265 / 8275 (rev 78)"
+    }
+  ],
+  "storage": [
+    {
+      "description": "17.0 SATA controller: Intel Corporation Sunrise Point-LP SATA Controller [AHCI mode] (rev 21)",
+      "type": "SATA"
+    }
+  ],
+  "fingerprint": "intel_intelrcoretmi57300uc_80865916"
+}
