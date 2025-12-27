@@ -1,0 +1,68 @@
+Installing Ubuntu via debootstrap...
+Get:1 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Hit:2 https://download.docker.com/linux/ubuntu noble InRelease
+Hit:3 https://deb.nodesource.com/node_22.x nodistro InRelease
+Hit:4 https://packages.microsoft.com/repos/code stable InRelease
+Hit:5 http://us.archive.ubuntu.com/ubuntu noble InRelease
+Get:6 http://us.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:7 http://us.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:8 http://us.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [175 kB]
+Get:9 http://security.ubuntu.com/ubuntu noble-security/main amd64 Components [21.5 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+Get:11 http://us.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [377 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:13 http://us.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7,316 B]
+Get:14 http://us.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+Get:15 http://us.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [10.5 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+Get:17 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Components [212 B]
+Get:18 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Components [71.5 kB]
+Get:19 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [212 B]
+Fetched 1,043 kB in 14s (72.0 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+debootstrap is already the newest version (1.0.134ubuntu1).
+The following packages were automatically installed and are no longer required:
+  grub-pc-bin libllvm19
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 144 not upgraded.
+mount: /tmp/ubuntu_install: /dev/sde5 already mounted on /tmp/ubuntu_install.
+       dmesg(1) may have more information after failed mount system call.
+[sudo] password for phantom-orchestrator: Installing Ubuntu via debootstrap...
+Hit:1 https://deb.nodesource.com/node_22.x nodistro InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu noble InRelease
+Hit:3 https://download.docker.com/linux/ubuntu noble InRelease
+Hit:4 http://us.archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:5 http://us.archive.ubuntu.com/ubuntu noble-backports InRelease
+Hit:6 https://packages.microsoft.com/repos/code stable InRelease
+Hit:7 http://security.ubuntu.com/ubuntu noble-security InRelease
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+debootstrap is already the newest version (1.0.134ubuntu1).
+The following packages were automatically installed and are no longer required:
+  grub-pc-bin libllvm19
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 144 not upgraded.
+I: Retrieving InRelease 
+I: Checking Release signature
+I: Valid Release signature (key id F6ECB3762474EDA9D21B7022871920D1991BC93C)
+I: Retrieving Packages 
+I: Validating Packages 
+I: Resolving dependencies of required packages...
+I: Resolving dependencies of base packages...
+I: Checking component main on http://archive.ubuntu.com/ubuntu...
+I: Retrieving adduser 3.137ubuntu1
+I: Validating adduser 3.137ubuntu1
+I: Retrieving apt 2.7.14build2
+I: Validating apt 2.7.14build2
+I: Retrieving apt-utils 2.7.14build2
+I: Validating apt-utils 2.7.14build2
+I: Retrieving base-files 13ubuntu10
+I: Validating base-files 13ubuntu10
+I: Retrieving base-passwd 3.6.3build1
+I: Validating base-passwd 3.6.3build1
+I: Retrieving bash 5.2.21-2ubuntu4
