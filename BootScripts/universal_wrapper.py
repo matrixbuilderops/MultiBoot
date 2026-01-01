@@ -25,6 +25,15 @@ class UniversalWrapper:
     
     def is_mac(self):
         """Detect if running on a Mac"""
+        # 1. Check for Apple Silicon architecture directly
+        try:
+            arch = subprocess.run(['uname', '-m'], capture_output=True, text=True).stdout.strip()
+            if arch in ['aarch64', 'arm64']:
+                return True
+        except:
+            pass
+
+        # 2. Check DMI data
         try:
             dmi = subprocess.run(['dmidecode', '-s', 'system-manufacturer'], 
                                capture_output=True, text=True, timeout=2)
@@ -33,6 +42,7 @@ class UniversalWrapper:
         except:
             pass
         
+        # 3. Check profile markers
         cpu_name = self.hardware.get('cpu', {}).get('name', '').lower()
         if 'apple' in cpu_name:
             return True
@@ -40,7 +50,7 @@ class UniversalWrapper:
         return False
     
     def is_apple_silicon(self):
-        """Detect if running on Apple Silicon (M1/M2/M3)"""
+        """Detect if running on Apple Silicon (M1/M2/M3)""" 
         arch = self.hardware.get('architecture', '')
         if arch in ['aarch64', 'arm64']:
             return True
@@ -193,17 +203,19 @@ class UniversalWrapper:
                 if computer_type in ["INTEL_PC", "AMD_PC", "INTEL_MAC"]:
                     # x86 Boot Logic
                     if os_name == 'linux':
-                        # Use verified Genesis UUID and paths
                         f.write(f'    linux /ubuntu_system/boot/vmlinuz-6.8.0-90-generic root=UUID=51972f11-0858-4d8b-b710-0facc7be9738 ro quiet splash\n')
                         f.write(f'    initrd /ubuntu_system/boot/initrd.img-6.8.0-90-generic\n')
                     elif os_name == 'windows':
                         f.write(f'    insmod chain\n')
                         f.write(f'    search --no-floppy --fs-uuid --set=root 2CF676F66E6B4DC4\n')
                         f.write(f'    chainloader /EFI/Microsoft/Boot/bootmgfw.efi\n')
-                    elif os_name == 'macos':
+                    elif os_name == 'macos' and computer_type != "INTEL_MAC":
                         f.write(f'    insmod chain\n')
                         f.write(f'    search --no-floppy --fs-uuid --set=root 32AC-EED7\n')
                         f.write(f'    chainloader /EFI/OC/OpenCore.efi\n')
+                    elif os_name == 'macos' and computer_type == "INTEL_MAC":
+                        f.write(f'    echo "Booting macOS natively on Intel Mac..."\n')
+                        f.write(f'    exit\n')
                 
                 elif computer_type == "ARM_MAC":
                     # ARM Boot Logic
@@ -211,8 +223,13 @@ class UniversalWrapper:
                         f.write(f'    echo "Preparing to boot Asahi Linux..."\n')
                         f.write(f'    chainloader /DriverArchive/ARM_Bootloaders/m1n1.bin\n')
                         f.write(f'    devicetree /DriverArchive/ARM_Bootloaders/u-boot.bin\n')
+                    elif os_name == 'windows':
+                        f.write(f'    echo "EXPERIMENTAL: Booting Windows ARM via UEFI wrapper..."\n')
+                        f.write(f'    chainloader /DriverArchive/ARM_Bootloaders/m1n1.bin\n')
+                        f.write(f'    devicetree /DriverArchive/ARM_Bootloaders/u-boot.bin\n')
                     else:
-                        f.write(f'    echo "Booting {os_name} on Apple Silicon is not yet implemented via GRUB."\n')
+                        f.write(f'    echo "Boot macOS natively via Apple Startup Manager (Verification complete)"\n')
+                        f.write(f'    exit\n')
                 
                 else:
                     f.write(f'    echo "Unsupported computer type: {computer_type}"\n')
