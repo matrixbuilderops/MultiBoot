@@ -151,6 +151,19 @@ On Intel Mac:
 
 ---
 
+## 🌍 THE COMPATIBILITY MATRIX (The "God Drive" Logic)
+
+This drive handles the "Translation Layer" for every physical host it touches:
+
+| Physical Host | Target: Windows | Target: macOS | Target: Ubuntu |
+| :--- | :--- | :--- | :--- |
+| **Windows PC (BIOS)** | GRUB Legacy Boot | OpenCore (Legacy Mode) | Ubuntu x86 |
+| **Windows PC (UEFI)** | EFI Chainload | OpenCore (UEFI Mode) | Ubuntu x86 |
+| **Intel Mac** | BootCamp via EFI | Native Boot (Verified) | Ubuntu x86 (Mac Drivers) |
+| **ARM Mac (M1/M2/M3)** | Windows ARM (m1n1) | Native Boot (Verified) | Ubuntu ARM (Asahi) |
+
+---
+
 ## 🔧 WHY YOUR CURRENT BOOT FAILED:
 
 The issues you saw are because we're booting DIRECTLY:

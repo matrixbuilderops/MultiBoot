@@ -34,5 +34,27 @@
     "enabled": true,
     "source": "/UniversalWrapper/DriverArchive",
     "cache_path": "/UniversalWrapper/HardwareProfiles"
+  },
+  "portability_matrix": {
+    "INTEL_PC": {
+      "macos": "opencore_x86_uefi_bios",
+      "windows": "native_chainload_x86",
+      "linux": "grub_ubuntu_x86"
+    },
+    "AMD_PC": {
+      "macos": "opencore_x86_amd_patched",
+      "windows": "native_chainload_amd",
+      "linux": "grub_ubuntu_x86_amd"
+    },
+    "INTEL_MAC": {
+      "macos": "native_verified",
+      "windows": "bootcamp_efi",
+      "linux": "grub_ubuntu_mac_x86"
+    },
+    "ARM_MAC": {
+      "macos": "native_verified_arm",
+      "windows": "experimental_arm_uefi",
+      "linux": "asahi_arm_bootchain"
+    }
   }
 }
