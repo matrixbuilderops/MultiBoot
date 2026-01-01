@@ -62,165 +62,30 @@ class UniversalWrapper:
     
     def get_boot_strategy(self, computer_type, target_os):
         """
-        ALL OSes are wrapped - this determines HOW to wrap them
+        THE UNIVERSAL MATRIX
+        Ensures any OS on the drive can run on any physical host.
         """
         
         strategies = {
-            # Intel/AMD PC - ALL wrapped
             "INTEL_PC": {
-                "macos": {
-                    "method": "opencore_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: OpenCore with hardware detection",
-                    "steps": [
-                        "Detect hardware",
-                        "Check kext archive",
-                        "Download missing kexts",
-                        "Generate OpenCore config",
-                        "Inject kexts",
-                        "Boot via OpenCore"
-                    ]
-                },
-                "windows": {
-                    "method": "driver_injection_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: Driver injection before boot",
-                    "steps": [
-                        "Detect hardware",
-                        "Check driver archive",
-                        "Download missing drivers",
-                        "Inject drivers to Windows",
-                        "Update registry",
-                        "Chainload Windows bootloader"
-                    ]
-                },
-                "linux": {
-                    "method": "module_injection_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: Module injection at boot",
-                    "steps": [
-                        "Detect hardware",
-                        "Check module archive",
-                        "Download missing modules",
-                        "Inject modules to initramfs",
-                        "Set kernel parameters",
-                        "Boot Linux kernel"
-                    ]
-                }
+                "macos": {"method": "opencore_x86", "description": "Wrapped: OpenCore UEFI/BIOS for Intel"},
+                "windows": {"method": "chainload_x86", "description": "Wrapped: Native Windows x86"},
+                "linux": {"method": "grub_x86", "description": "Wrapped: Ubuntu x86"}
             },
-            
             "AMD_PC": {
-                "macos": {
-                    "method": "opencore_amd_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: OpenCore with AMD patches",
-                    "steps": [
-                        "Detect AMD hardware",
-                        "Check kext archive",
-                        "Download AMD-specific kexts",
-                        "Apply AMD kernel patches",
-                        "Generate OpenCore config",
-                        "Boot via OpenCore"
-                    ]
-                },
-                "windows": {
-                    "method": "driver_injection_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: AMD driver injection",
-                    "steps": [
-                        "Detect AMD hardware",
-                        "Check AMD driver archive",
-                        "Inject AMD drivers",
-                        "Boot Windows"
-                    ]
-                },
-                "linux": {
-                    "method": "module_injection_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: AMD module injection",
-                    "steps": [
-                        "Detect AMD hardware",
-                        "Inject AMD modules",
-                        "Boot Linux"
-                    ]
-                }
+                "macos": {"method": "opencore_amd", "description": "Wrapped: OpenCore with AMD Kernel Patches"},
+                "windows": {"method": "chainload_x86", "description": "Wrapped: Windows x86 (AMD Drivers)"},
+                "linux": {"method": "grub_x86", "description": "Wrapped: Ubuntu x86 (AMD Modules)"}
             },
-            
-            # Intel Mac - ALL wrapped (even though native)
             "INTEL_MAC": {
-                "macos": {
-                    "method": "native_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: Verify drivers before native boot",
-                    "steps": [
-                        "Detect Mac hardware",
-                        "Verify system integrity",
-                        "Check for updates",
-                        "Boot macOS natively"
-                    ]
-                },
-                "windows": {
-                    "method": "bootcamp_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: Boot Camp with driver injection",
-                    "steps": [
-                        "Detect Mac hardware",
-                        "Check Boot Camp driver archive",
-                        "Inject Boot Camp drivers",
-                        "Configure Boot Camp",
-                        "Boot Windows"
-                    ]
-                },
-                "linux": {
-                    "method": "module_injection_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: Mac-specific module injection",
-                    "steps": [
-                        "Detect Mac hardware",
-                        "Check Mac-compatible modules",
-                        "Inject Apple hardware modules",
-                        "Boot Linux"
-                    ]
-                }
+                "macos": {"method": "native", "description": "Verified: Native Intel Mac Boot"},
+                "windows": {"method": "bootcamp_refit", "description": "Wrapped: BootCamp via EFI"},
+                "linux": {"method": "grub_mac_x86", "description": "Wrapped: Ubuntu x86 (Mac Drivers)"}
             },
-            
-            # Apple Silicon Mac - ALL wrapped
             "ARM_MAC": {
-                "macos": {
-                    "method": "native_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: Verify before native boot",
-                    "steps": [
-                        "Detect Apple Silicon",
-                        "Verify system",
-                        "Boot macOS natively"
-                    ]
-                },
-                "windows": {
-                    "method": "arm_windows_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: Windows ARM with driver injection",
-                    "experimental": True,
-                    "steps": [
-                        "Detect Apple Silicon",
-                        "Check Windows ARM drivers",
-                        "Inject ARM-compatible drivers",
-                        "Boot Windows ARM"
-                    ]
-                },
-                "linux": {
-                    "method": "asahi_wrapper",
-                    "wrapper_needed": True,
-                    "description": "Wrapped: Asahi Linux with full driver stack",
-                    "steps": [
-                        "Detect Apple Silicon",
-                        "Check Asahi driver archive",
-                        "Inject Apple GPU drivers",
-                        "Inject audio drivers",
-                        "Configure devicetree",
-                        "Boot Asahi Linux"
-                    ]
-                }
+                "macos": {"method": "native_arm", "description": "Verified: Native Apple Silicon Boot"},
+                "windows": {"method": "arm_windows_injection", "description": "EXPERIMENTAL: Windows ARM via m1n1/UEFI"},
+                "linux": {"method": "asahi_wrapper", "description": "Wrapped: Ubuntu ARM (Asahi Kernel)"}
             }
         }
         
