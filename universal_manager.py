@@ -53,7 +53,7 @@ class UniversalMultiBootManager:
         print("STEP 3: Building Kext Archive")
         print("=" * 60)
         
-        script = self.boot_scripts_dir / "build_kext_archive.py"
+        script = self.boot_scripts_dir / "build_driver_archive.py"
         result = subprocess.run([sys.executable, str(script)])
         
         if result.returncode != 0:
